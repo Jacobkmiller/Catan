@@ -11,10 +11,40 @@
             background-color: #000000;
         }
     </style>
-    <script src="{% static '/Game/js/bower_components/piki.js/bin/pixi.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/pixi.js/bin/pixi.js' %}"></script>
 </head>
 <body>
 
-    <div>Hi there</div>
+    <script>
+
+        var renderer = PIXI.autoDetectRenderer(900, 760, {backgroundColor: 0x1099bb});
+
+        document.body.appendChild(renderer.view);
+
+        var stage = new PIXI.Container();
+
+        var texture = PIXI.Texture.fromImage("static/Game/images/camera-256.png");
+
+        var camera = new PIXI.Sprite(texture);
+
+        camera.anchor.x = 0.5;
+        camera.anchor.y = 0.5;
+
+        camera.position.x = 300;
+        camera.position.y = 250;
+
+        stage.addChild(camera);
+
+        animate();
+
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            camera.rotation += 0.1;
+
+            renderer.render(stage);
+        }
+    </script>
 </body>
 </html>
