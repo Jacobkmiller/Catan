@@ -16,7 +16,7 @@
 <body data-root="{$ static $}">
 
 <script>
-	var renderer = PIXI.autoDetectRenderer(1200, 1000,{backgroundColor : 0x1099bb});
+	var renderer = PIXI.autoDetectRenderer(1000, 1000,{backgroundColor : 0x1099bb});
 document.body.appendChild(renderer.view);
 
 // create the root of the scene graph
@@ -45,62 +45,71 @@ function shuffle(array) {
   return array;
 }
 
-var images = ['static/Game/images/brick_hex_edited.png', 'static/Game/images/desert_hex_edited.png', 'static/Game/images/forest_hex_edited.png', 'static/Game/images/meadow_hex_edited.png', 'static/Game/images/mountain_hex_edited.png', 'static/Game/images/wheat_hex_edited.png']
-var list = [0,1,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5]
-var random = shuffle(list)
+var images = ['static/Game/images/brick_hex_edited.png', 'static/Game/images/desert_hex_edited.png', 'static/Game/images/forest_hex_edited.png', 'static/Game/images/meadow_hex_edited.png', 'static/Game/images/mountain_hex_edited.png', 'static/Game/images/wheat_hex_edited.png'];
+var layout = [3,4,5,4,3]
+var width = [1,0,-1,0,1]
+var list = [0,1,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5];
+var random = shuffle(list);
+var coordinates = [];
 for (var j = 0; j < 5; j++) {
 
-	if (j == 0) {
-	    for (var i = 0; i < 3; i++) {
-	        var bunny = PIXI.Sprite.fromImage(images[random[i]]);
-	        bunny.x = 150 * i + 150;
-	        bunny.y = 130 * j;
-	        bunny.height = 170;
-	        bunny.width = 150;
-	        container.addChild(bunny);
-	    };
-	}
-	else if (j == 1){
+    for (var i = 0; i < layout[j]; i++) {
+        var tile = PIXI.Sprite.fromImage(images[random[i]]);
+        tile.x = (renderer.width/5) * i + ((renderer.width/10)*width[j]);
+        tile.y = (renderer.width/6.5) * j;
+        tile.height = renderer.height/5;
+        tile.width = renderer.width/5;
+        container.addChild(tile);
+        coordinates.push({'x':tile.x, 'y':tile.y});
+    };
+};
+	/*else if (j == 1){
 		for (var i = 0; i < 4; i++) {
-	        var bunny = PIXI.Sprite.fromImage(images[random[i+3]]);
-	        bunny.x = 150 * i + 75;
-	        bunny.y = 130 * j;
-	        bunny.height = 170;
-	        bunny.width = 150;
-	        container.addChild(bunny);
+	        var tile = PIXI.Sprite.fromImage(images[random[i+3]]);
+	        tile.x = (renderer.width/5) * i;
+	        tile.y = (renderer.width/6.5) * j;
+	        tile.height = renderer.height/5;
+	        tile.width = renderer.width/5;
+	        container.addChild(tile);
+	        coordinates.push({'x':tile.x, 'y':tile.y});
 	    };
 	}
 	else if (j == 2){
 		for (var i = 0; i < 5; i++) {
-	        var bunny = PIXI.Sprite.fromImage(images[random[i+7]]);
-	        bunny.x = 150 * i;
-	        bunny.y = 130 * j;
-	        bunny.height = 170;
-	        bunny.width = 150;
-	        container.addChild(bunny);
+	        var tile = PIXI.Sprite.fromImage(images[random[i+7]]);
+	        tile.x = (renderer.width/5) * i - (renderer.width/10);
+	        tile.y = (renderer.width/6.5) * j;
+	        tile.height = renderer.height/5;
+	        tile.width = renderer.width/5;
+	        container.addChild(tile);
+	        coordinates.push({'x':tile.x, 'y':tile.y});
 	    };
 	}
 	else if (j == 3){
 		for (var i = 0; i < 4; i++) {
-	        var bunny = PIXI.Sprite.fromImage(images[random[i+12]]);
-	        bunny.x = 150 * i + 75;
-	        bunny.y = 130 * j;
-	        bunny.height = 170;
-	        bunny.width = 150;
-	        container.addChild(bunny);
+	        var tile = PIXI.Sprite.fromImage(images[random[i+12]]);
+	        tile.x = (renderer.width/5) * i;
+	        tile.y = (renderer.width/6.5) * j;
+	        tile.height = renderer.height/5;
+	        tile.width = renderer.width/5;
+	        container.addChild(tile);
+	        coordinates.push({'x':tile.x, 'y':tile.y});
 	    };
 	}
 	else if (j == 4){
 		for (var i = 0; i < 3; i++) {
-	        var bunny = PIXI.Sprite.fromImage(images[random[i+16]]);
-	        bunny.x = 150 * i + 150;
-	        bunny.y = 130 * j;
-	        bunny.height = 170;
-	        bunny.width = 150;
-	        container.addChild(bunny);
+	        var tile = PIXI.Sprite.fromImage(images[random[i+16]]);
+	        tile.x = (renderer.width/5) * i + (renderer.width/10);
+	        tile.y = (renderer.width/6.5) * j;
+	        tile.height = renderer.height/5;
+	        tile.width = renderer.width/5;
+	        container.addChild(tile);
+	        coordinates.push({'x':tile.x, 'y':tile.y});
 	    };
 	}
-};
+};*/
+console.log(coordinates);
+
 /*
  * All the bunnies are added to the container with the addChild method
  * when you do this, all the bunnies become children of the container, and when a container moves,
