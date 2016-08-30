@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a563244b-f3c2-4042-a4d6-e79e7f82d539" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" afterPath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" afterPath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" />
     </list>
     <ignored path="Catan.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -737,7 +735,14 @@
       <option name="project" value="LOCAL" />
       <updated>1472519645291</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added background.js file to static/Game/js for keeping all of the javascript code to run the app.&#10;&#10;">
+      <created>1472521771970</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1472521771970</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
