@@ -12,6 +12,7 @@
 		}
 	</style>
 	<script src="{% static 'Game/js/bower_components/pixi.js/bin/pixi.js' %}"></script>
+	<script src="{% static 'Game/js/background.js' %}"></script>
 </head>
 <body data-root="{$ static $}">
 
@@ -52,66 +53,29 @@ var list = [0,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,3,5,2];
 var random = shuffle(list);
 var coordinates = [];
 var count = 0;
+var tile_width = renderer.width * .2;
 for (var j = 0; j < 5; j++) {
 
     for (var i = 0; i < layout[j]; i++) {
     	var x = random[i+count]
         var tile = PIXI.Sprite.fromImage(images[x]);
-        tile.x = (renderer.width/5) * i + ((renderer.width/10)*width[j]);
+        tile.x = (renderer.width*.2) * i + ((renderer.width*.1)*width[j]);
         tile.y = (renderer.width/6.5) * j;
-        tile.height = renderer.height/5;
-        tile.width = renderer.width/5;
+        tile.anchor.x = 0.5;
+        tile.anchor.y = 0.5;
+        tile.height = renderer.height*.2;
+        tile.width = renderer.width*.2;
         container.addChild(tile);
         coordinates.push({'x':tile.x, 'y':tile.y});
     };
     count += layout[j];
 };
-	/*else if (j == 1){
-		for (var i = 0; i < 4; i++) {
-	        var tile = PIXI.Sprite.fromImage(images[random[i+3]]);
-	        tile.x = (renderer.width/5) * i;
-	        tile.y = (renderer.width/6.5) * j;
-	        tile.height = renderer.height/5;
-	        tile.width = renderer.width/5;
-	        container.addChild(tile);
-	        coordinates.push({'x':tile.x, 'y':tile.y});
-	    };
-	}
-	else if (j == 2){
-		for (var i = 0; i < 5; i++) {
-	        var tile = PIXI.Sprite.fromImage(images[random[i+7]]);
-	        tile.x = (renderer.width/5) * i - (renderer.width/10);
-	        tile.y = (renderer.width/6.5) * j;
-	        tile.height = renderer.height/5;
-	        tile.width = renderer.width/5;
-	        container.addChild(tile);
-	        coordinates.push({'x':tile.x, 'y':tile.y});
-	    };
-	}
-	else if (j == 3){
-		for (var i = 0; i < 4; i++) {
-	        var tile = PIXI.Sprite.fromImage(images[random[i+12]]);
-	        tile.x = (renderer.width/5) * i;
-	        tile.y = (renderer.width/6.5) * j;
-	        tile.height = renderer.height/5;
-	        tile.width = renderer.width/5;
-	        container.addChild(tile);
-	        coordinates.push({'x':tile.x, 'y':tile.y});
-	    };
-	}
-	else if (j == 4){
-		for (var i = 0; i < 3; i++) {
-	        var tile = PIXI.Sprite.fromImage(images[random[i+16]]);
-	        tile.x = (renderer.width/5) * i + (renderer.width/10);
-	        tile.y = (renderer.width/6.5) * j;
-	        tile.height = renderer.height/5;
-	        tile.width = renderer.width/5;
-	        container.addChild(tile);
-	        coordinates.push({'x':tile.x, 'y':tile.y});
-	    };
-	}
-};*/
 console.log(coordinates);
+
+for (var y = 0; y < coordinates.length; y++){
+	create_number(container, 5, coordinates[y]['x'], coordinates[y]['y'], (tile_width * .14));
+	console.log(coordinates[y]['x']);
+}
 
 /*
  * All the bunnies are added to the container with the addChild method

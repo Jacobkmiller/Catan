@@ -30,7 +30,7 @@ function create_number(stage, number, x, y, radius) {
         text_num.anchor.x = 0.5;
         text_num.anchor.y = 0.5;
         text_num.x = x;
-        text_num.y = y - radius;
+        text_num.y = y - radius * .1;
 
         add_probability(stage, number, x, y, radius);
 
