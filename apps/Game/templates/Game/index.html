@@ -4,9 +4,122 @@
 	{% load static %}
 	<link rel="stylesheet" type="text/css" href="{% static 'Game/css/style.css' %}" media="screen" title="no title" charset="utf-8">
 	<title>Index</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="{% static 'Game/js/bower_components/pixi.js/bin/pixi.js' %}"></script>
 </head>
-<body>
-Test!
-<div class="hexagon"></div>
+<body data-root="{$ static $}">
+
+<script>
+	var renderer = PIXI.autoDetectRenderer(1200, 1000,{backgroundColor : 0x1099bb});
+document.body.appendChild(renderer.view);
+
+// create the root of the scene graph
+var stage = new PIXI.Container();
+
+var container = new PIXI.Container();
+
+stage.addChild(container);
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+var images = ['static/Game/images/brick_hex_edited.png', 'static/Game/images/desert_hex_edited.png', 'static/Game/images/forest_hex_edited.png', 'static/Game/images/meadow_hex_edited.png', 'static/Game/images/mountain_hex_edited.png', 'static/Game/images/wheat_hex_edited.png']
+var list = [0,1,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5,0,2,3,4,5]
+var random = shuffle(list)
+for (var j = 0; j < 5; j++) {
+
+	if (j == 0) {
+	    for (var i = 0; i < 3; i++) {
+	        var bunny = PIXI.Sprite.fromImage(images[random[i]]);
+	        bunny.x = 150 * i + 150;
+	        bunny.y = 130 * j;
+	        bunny.height = 170;
+	        bunny.width = 150;
+	        container.addChild(bunny);
+	    };
+	}
+	else if (j == 1){
+		for (var i = 0; i < 4; i++) {
+	        var bunny = PIXI.Sprite.fromImage(images[random[i+3]]);
+	        bunny.x = 150 * i + 75;
+	        bunny.y = 130 * j;
+	        bunny.height = 170;
+	        bunny.width = 150;
+	        container.addChild(bunny);
+	    };
+	}
+	else if (j == 2){
+		for (var i = 0; i < 5; i++) {
+	        var bunny = PIXI.Sprite.fromImage(images[random[i+7]]);
+	        bunny.x = 150 * i;
+	        bunny.y = 130 * j;
+	        bunny.height = 170;
+	        bunny.width = 150;
+	        container.addChild(bunny);
+	    };
+	}
+	else if (j == 3){
+		for (var i = 0; i < 4; i++) {
+	        var bunny = PIXI.Sprite.fromImage(images[random[i+12]]);
+	        bunny.x = 150 * i + 75;
+	        bunny.y = 130 * j;
+	        bunny.height = 170;
+	        bunny.width = 150;
+	        container.addChild(bunny);
+	    };
+	}
+	else if (j == 4){
+		for (var i = 0; i < 3; i++) {
+	        var bunny = PIXI.Sprite.fromImage(images[random[i+16]]);
+	        bunny.x = 150 * i + 150;
+	        bunny.y = 130 * j;
+	        bunny.height = 170;
+	        bunny.width = 150;
+	        container.addChild(bunny);
+	    };
+	}
+};
+/*
+ * All the bunnies are added to the container with the addChild method
+ * when you do this, all the bunnies become children of the container, and when a container moves,
+ * so do all its children.
+ * This gives you a lot of flexibility and makes it easier to position elements on the screen
+ */
+container.x = 100;
+container.y = 60;
+
+// start animating
+animate();
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    // render the root container
+    renderer.render(stage);
+}
+</script>
 </body>
 </html>
