@@ -49,13 +49,13 @@
             stage.addChild(num_piece);
 
             var textStyle = {fill: stats[number]['color'],
-                             fontSize: radius*1 + 'px'
+                             fontSize: radius*1.2 + 'px'
             };
             var text_num = new PIXI.Text(number, textStyle);
             text_num.anchor.x = 0.5;
             text_num.anchor.y = 0.5;
             text_num.x = x;
-            text_num.y = y;
+            text_num.y = y- radius*0.05;
 
             add_probability(stage, number, x, y, radius);
 
@@ -109,6 +109,8 @@
 
         create_number(stage, 6, 100, 100, 35);
         create_number(stage, 3, 350, 200, 35);
+        create_number(stage, 12, 500, 500, 70);
+        create_numver(stage, )
 
         animate();
 

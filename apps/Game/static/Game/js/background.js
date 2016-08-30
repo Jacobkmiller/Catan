@@ -9,7 +9,7 @@ function create_number(stage, number, x, y, radius) {
         stats[3] = {color: "#000000", probability: 2};
         stats[4] = {color: "#000000", probability: 3};
         stats[5] = {color: "#000000", probability: 4};
-        stats[6] = {color: "#FF0000", probability: 5};
+        stats[6] = {color: "#000000", probability: 5};
         stats[8] = {color: "#FF0000", probability: 5};
         stats[9] = {color: "#000000", probability: 4};
         stats[10] = {color: "#000000", probability: 3};
@@ -30,7 +30,7 @@ function create_number(stage, number, x, y, radius) {
         text_num.anchor.x = 0.5;
         text_num.anchor.y = 0.5;
         text_num.x = x;
-        text_num.y = y;
+        text_num.y = y - radius;
 
         add_probability(stage, number, x, y, radius);
 
