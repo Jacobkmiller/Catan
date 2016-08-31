@@ -57,10 +57,10 @@ var tile_width = renderer.width * .2;
 for (var j = 0; j < 5; j++) {
 
     for (var i = 0; i < layout[j]; i++) {
-    	var x = random[i+count]
+    	var x = random[i+count];
         var tile = PIXI.Sprite.fromImage(images[x]);
-        tile.x = (renderer.width*.2) * i + ((renderer.width*.1)*width[j]);
-        tile.y = (renderer.width/6.5) * j;
+        tile.x = (renderer.width*.2) * i + ((renderer.width*.1)*width[j])+ tile_width/2;
+        tile.y = (renderer.width/6.5) * j+ tile_width/2;
         tile.anchor.x = 0.5;
         tile.anchor.y = 0.5;
         tile.height = renderer.height*.2;
