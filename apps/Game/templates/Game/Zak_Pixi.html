@@ -39,9 +39,12 @@
 
         stage.addChild(camera);
 
-        var t = new NumberButton(6, 300, 250, 35);
+        var t = new NumberButton(6, 500, 500, 35);
 
         stage.addChild(t);
+        var te = new PIXI.Texture.fromImage("static/Game/images/brick_hex_edited.png");
+        var h = new Hex("static/Game/images/brick_hex_edited.png", 300, 250, 100, 2);
+        stage.addChild(h);
 
         animate();
 
