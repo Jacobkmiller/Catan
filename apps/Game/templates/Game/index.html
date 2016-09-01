@@ -39,6 +39,7 @@ buttons = shuffle(buttons);
 var random = shuffle(list);
 var coordinates = [];
 var count = 0;
+var desert_reached = 0;
 var tile_width = renderer.width * 0.15;
 var tile_height = tile_width * 2 / 3 * Math.sqrt(3);
 for (var j = 0; j < 5; j++) {
@@ -50,9 +51,9 @@ for (var j = 0; j < 5; j++) {
         var y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;
         if (n == 0) {
             var tile = new Hex(images[n], x, y, tile_width, 0);
-            i += 1;
+            desert_reached = 1
         } else {
-            var tile = new Hex(images[n], x, y, tile_width, buttons[i + count]);
+            var tile = new Hex(images[n], x, y, tile_width, buttons[i + count - desert_reached]);
         }
 
 {#        var tile = PIXI.Sprite.fromImage(images[n]);#}
