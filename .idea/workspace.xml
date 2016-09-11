@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a563244b-f3c2-4042-a4d6-e79e7f82d539" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/brick_hex_edited.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/desert_hex_edited.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/forest_hex_edited.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/meadow_hex_edited.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/mountain_hex_edited.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/Game/static/Game/images/wheat_hex_edited.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" afterPath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" afterPath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/templates/Game/index.html" afterPath="$PROJECT_DIR$/apps/Game/templates/Game/index.html" />
     </list>
     <ignored path="Catan.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -545,7 +536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1472716625956</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Created Hex Object and Centered board on screen. Rewrote index to behave appropriately. There is glitch right now when trying to avoid putting a spacer on the desert piece. Still working this out.">
+      <created>1473634164383</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1473634164383</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
