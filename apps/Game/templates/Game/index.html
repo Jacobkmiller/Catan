@@ -30,32 +30,33 @@ stage.addChild(container);
 
 
 
-var images = ['static/Game/images/desert_hex_edited.png','static/Game/images/brick_hex_edited.png', 'static/Game/images/forest_hex_edited.png', 'static/Game/images/meadow_hex_edited.png', 'static/Game/images/mountain_hex_edited.png', 'static/Game/images/wheat_hex_edited.png'];
+var images = ['static/Game/images/desert.png','static/Game/images/brick.png', 'static/Game/images/forest.png', 'static/Game/images/meadow.png', 'static/Game/images/mountain.png', 'static/Game/images/wheat.png'];
 var layout = [3,4,5,4,3];
 var width = [2,1,0,1,2];
 var list = [0,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,3,5,2];
 var buttons = [3, 9, 10, 4, 8, 12, 5, 10, 3, 5, 8, 11, 6, 2, 6, 9, 4, 11];
+var rotations = [0, Math.PI/3, Math.PI *2/3, Math.PI, Math.PI * 4/3, Math.PI * 5/3];
 buttons = shuffle(buttons);
 var random = shuffle(list);
 var coordinates = [];
 var count = 0;
 var desert_reached = 0;
-var tile_width = renderer.width * 0.15;
+var tile_width = renderer.width * 0.2;
 var tile_height = tile_width * 2 / 3 * Math.sqrt(3);
-for (var j = 0; j < 5; j++) {
-
-    var i = 0;
-    while (i < layout[j]) {
-    	var n = random[i+count];
-        var x = (tile_width) * i  + tile_width/2 + width[j]*tile_width/2;
-        var y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;
-        if (n == 0) {
-            var tile = new Hex(images[n], x, y, tile_width, 0);
-            desert_reached = 1
-        } else {
-            var tile = new Hex(images[n], x, y, tile_width, buttons[i + count - desert_reached]);
-        }
-
+{#for (var j = 0; j < 5; j++) {#}
+{##}
+{#    var i = 0;#}
+{#    while (i < layout[j]) {#}
+{#    	var n = random[i+count];#}
+{#        var x = (tile_width) * i  + tile_width/2 + width[j]*tile_width/2;#}
+{#        var y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;#}
+{#        if (n == 0) {#}
+{#            var tile = new Hex(images[n], x, y, tile_width, 0);#}
+{#            desert_reached = 1#}
+{#        } else {#}
+{#            var tile = new Hex(images[n], x, y, tile_width, buttons[i + count - desert_reached]);#}
+{#        }#}
+{#        tile.rotation = rotations[Math.round(Math.random()*5)];#}
 {#        var tile = PIXI.Sprite.fromImage(images[n]);#}
 {#        tile.x = (tile_width) * i  + tile_width/2 + width[j]*tile_width/2;#}
 {#        tile.y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;#}
@@ -63,18 +64,20 @@ for (var j = 0; j < 5; j++) {
 {#        tile.anchor.y = 0.5;#}
 {#        tile.height = tile_height;#}
 {#        tile.width = tile_width;#}
-        container.addChild(tile);
-        coordinates.push({'x':tile.x, 'y':tile.y});
-        i += 1;
-    };
-    count += layout[j];
-};
+{#        container.addChild(tile);#}
+{#        coordinates.push({'x':tile.x, 'y':tile.y});#}
+{#        i += 1;#}
+{#    };#}
+{#    count += layout[j];#}
+{#{;#}
+var board = new GameBoard(renderer.width/2, renderer.height/2, renderer.width*0.85);
+    stage.addChild(board);
 console.log(coordinates);
 
 {#for (var y = 0; y < coordinates.length; y++){#}
 {#	create_number(container, 5, coordinates[y]['x'], coordinates[y]['y'], (tile_width * .14));#}
 {#	console.log(coordinates[y]['x']);#}
-{#}#}
+{#  #}
 
 /*
  * All the bunnies are added to the container with the addChild method
@@ -94,10 +97,7 @@ console.log(coordinates);
 {#container.position = [-0.5,-0.5];#}
 {#    container.x = 0;#}
 {#    container.y = 0;#}
-    console.log(container.position);
-    console.log(container.pivot);
-    console.log(container.x);
-    console.log(container.y);
+
 
 // start animating
 animate();

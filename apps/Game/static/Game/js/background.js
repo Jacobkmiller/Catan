@@ -14,7 +14,7 @@ function NumberButton(number, x, y, radius) {
     this.radius = radius;
     this.number = number;
     this.token = new PIXI.Graphics();
-    console.log("Radius: " + this.radius);
+    // console.log("Radius: " + this.radius);
     this.create = function (g) {
         var stats = {};
 
@@ -87,12 +87,11 @@ NumberButton.prototype.constructor = NumberButton;
 
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
-
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
 
     // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
+    randomIndex = Math.round(Math.random() * currentIndex);
     currentIndex -= 1;
 
     // And swap it with the current element.
@@ -104,11 +103,6 @@ function shuffle(array) {
   return array;
 }
 
-
-Hex.prototype = Object.create(PIXI.Sprite.prototype);
-Hex.prototype.constructor = Hex;
-
-
 function Hex(url, x, y, width, number) {
     PIXI.Container.call(this);
     this.sprite = PIXI.Sprite.fromImage(url);
@@ -119,6 +113,7 @@ function Hex(url, x, y, width, number) {
     this.pivot.x = this.width/2;
     this.pivot.y = this.height/2;
     this.position.set(x, y);
+    // this.type = type;
     this.addChild(this.sprite);
 
     if (number == 0) {
@@ -128,9 +123,61 @@ function Hex(url, x, y, width, number) {
         this.addChild(this.button);
     }
 
-
-
 }
 
 Hex.prototype = Object.create(PIXI.Container.prototype);
 Hex.prototype.constructor = Hex;
+
+function GameBoard(x, y, width) {
+    PIXI.Container.call(this);
+    this.images = ['static/Game/images/desert.png','static/Game/images/brick.png', 'static/Game/images/forest.png', 'static/Game/images/meadow.png', 'static/Game/images/mountain.png', 'static/Game/images/wheat.png'];
+    this.layout = [3,4,5,4,3];
+    this.starting_position = [2,1,0,1,2];
+    this.hex_list = [0,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,3,5,2];
+    this.buttons = [3, 9, 10, 4, 8, 12, 5, 10, 3, 5, 8, 11, 6, 2, 6, 9, 4, 11];
+    this.rotations = [0, Math.PI/3, Math.PI *2/3, Math.PI, Math.PI * 4/3, Math.PI * 5/3];
+    this.buttons = shuffle(this.buttons);
+    console.log(this.buttons.length);
+    this.randomized_hex_list = shuffle(this.hex_list);
+    this.coordinates = [];
+    this.hexes = [];
+    var count = 0;
+    var desert_reached = 0;
+    this.tile_width = width * 0.2;
+    this.tile_height = this.tile_width * 2 / 3 * Math.sqrt(3);
+    for (var j = 0; j < 5; j++) {
+
+        var i = 0;
+        var row = [];
+        while (i < this.layout[j]) {
+            var n = this.randomized_hex_list[i+count];
+            var x1 = (this.tile_width) * i + this.starting_position[j]*this.tile_width/2 + this.tile_width/2;
+            var y1 = (this.tile_height-this.tile_width/(2*Math.sqrt(3))) * j + this.tile_height/2;
+            var type = '';
+            var a = this.images[n].split("/");
+            type = a[a.length - 1];
+            type = type.split('.')[0];
+            if (n == 0) {
+                var tile = new Hex(this.images[n], x1, y1, this.tile_width, 0);
+                desert_reached = 1;
+            } else {
+                console.log(i + count - desert_reached);
+                var tile = new Hex(this.images[n], x1, y1, this.tile_width, this.buttons[i + count - desert_reached]);
+            }
+            tile.rotation = this.rotations[Math.round(Math.random()*5)];
+
+            this.addChild(tile);
+            row.push(tile);
+            this.coordinates.push({'x':tile.x, 'y':tile.y});
+            i += 1;
+        };
+        this.hexes.push(row);
+        count += this.layout[j];
+    };
+    // this.position.set(300, 250);
+    this.pivot.set(this.width/2, this.height/2);
+    this.position.set(x, y);
+}
+
+GameBoard.prototype = Object.create(PIXI.Container.prototype);
+GameBoard.prototype.constructor = GameBoard;

@@ -18,13 +18,14 @@
 
     <script>
 
-        var renderer = PIXI.autoDetectRenderer(900, 760, {backgroundColor: 0x1099bb, antialias: true});
+        var renderer = PIXI.autoDetectRenderer(1000, 760, {backgroundColor: 0x1099bb, antialias: true});
 
         document.body.appendChild(renderer.view);
 
         var stage = new PIXI.Container();
 
         stage.interactive = true;
+
 
         var texture = PIXI.Texture.fromImage("static/Game/images/camera-256.png");
 
@@ -43,8 +44,22 @@
 
         stage.addChild(t);
         var te = new PIXI.Texture.fromImage("static/Game/images/brick_hex_edited.png");
-        var h = new Hex("static/Game/images/brick_hex_edited.png", 300, 250, 100, 2);
+        var h = new Hex("static/Game/images/brick_hex_edited.png", 300, 500, 100, 2);
         stage.addChild(h);
+        var g = new GameBoard(300, 250, renderer.width/4);
+        stage.addChild(g);
+{#        var gr = new PIXI.Graphics();#}
+{#        gr.beginFill(0x000000);#}
+{#        gr.drawCircle(300, 250, 10);#}
+{#        stage.addChild(gr);#}
+        var r = PIXI.Rectangle.EMPTY;
+        r = g.getBounds();
+        var bb = new PIXI.Graphics();
+        bb.drawShape(r);
+        bb.alpha = 0.5;
+        stage.addChild(bb);
+        console.log(g.hexes);
+        console.log(g.hexes[1][1]);
 
         animate();
 
