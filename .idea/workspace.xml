@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a563244b-f3c2-4042-a4d6-e79e7f82d539" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" afterPath="$PROJECT_DIR$/apps/Game/static/Game/js/background.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" afterPath="$PROJECT_DIR$/apps/Game/templates/Game/Zak_Pixi.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/Game/templates/Game/index.html" afterPath="$PROJECT_DIR$/apps/Game/templates/Game/index.html" />
     </list>
     <ignored path="Catan.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -553,7 +550,14 @@
       <option name="project" value="LOCAL" />
       <updated>1473634312743</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added the ability to add green roads when edges of hexes are clicked and green cities when vertices are clicked.">
+      <created>1473738339473</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1473738339473</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -598,7 +602,8 @@
     <MESSAGE value="Added offset to game bored so the pieces board is centered in the screen. Changed the create_number function to become an Object called NumberButton. This is not implemented in the index.html file yet.&#10;" />
     <MESSAGE value="Created Hex Object and Centered board on screen. Rewrote index to behave appropriately. There is glitch right now when trying to avoid putting a spacer on the desert piece. Still working this out." />
     <MESSAGE value="Created a gameboard object in background.js, this will take an x, y, location and place the center of the board at that location. It also needs a width argument. The width will be  be the size of teh game board in total." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created a gameboard object in background.js, this will take an x, y, location and place the center of the board at that location. It also needs a width argument. The width will be  be the size of teh game board in total." />
+    <MESSAGE value="Added the ability to add green roads when edges of hexes are clicked and green cities when vertices are clicked." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the ability to add green roads when edges of hexes are clicked and green cities when vertices are clicked." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
