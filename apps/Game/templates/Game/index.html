@@ -16,99 +16,29 @@
 </head>
 <body data-root="{$ static $}">
 
-<script>
-	var renderer = PIXI.autoDetectRenderer(1000, 1000,{backgroundColor : 0x1099bb});
-document.body.appendChild(renderer.view);
+    <script>
+        console.log(window.innerWidth, window.innerHeight);
+        var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {backgroundColor : 0x1099bb});
+        document.body.appendChild(renderer.view);
 
-// create the root of the scene graph
-var stage = new PIXI.Container();
-
-var container = new PIXI.Container();
-
-
-stage.addChild(container);
-
-
-
-var images = ['static/Game/images/desert.png','static/Game/images/brick.png', 'static/Game/images/forest.png', 'static/Game/images/meadow.png', 'static/Game/images/mountain.png', 'static/Game/images/wheat.png'];
-var layout = [3,4,5,4,3];
-var width = [2,1,0,1,2];
-var list = [0,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,3,5,2];
-var buttons = [3, 9, 10, 4, 8, 12, 5, 10, 3, 5, 8, 11, 6, 2, 6, 9, 4, 11];
-var rotations = [0, Math.PI/3, Math.PI *2/3, Math.PI, Math.PI * 4/3, Math.PI * 5/3];
-buttons = shuffle(buttons);
-var random = shuffle(list);
-var coordinates = [];
-var count = 0;
-var desert_reached = 0;
-var tile_width = renderer.width * 0.2;
-var tile_height = tile_width * 2 / 3 * Math.sqrt(3);
-{#for (var j = 0; j < 5; j++) {#}
-{##}
-{#    var i = 0;#}
-{#    while (i < layout[j]) {#}
-{#    	var n = random[i+count];#}
-{#        var x = (tile_width) * i  + tile_width/2 + width[j]*tile_width/2;#}
-{#        var y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;#}
-{#        if (n == 0) {#}
-{#            var tile = new Hex(images[n], x, y, tile_width, 0);#}
-{#            desert_reached = 1#}
-{#        } else {#}
-{#            var tile = new Hex(images[n], x, y, tile_width, buttons[i + count - desert_reached]);#}
-{#        }#}
-{#        tile.rotation = rotations[Math.round(Math.random()*5)];#}
-{#        var tile = PIXI.Sprite.fromImage(images[n]);#}
-{#        tile.x = (tile_width) * i  + tile_width/2 + width[j]*tile_width/2;#}
-{#        tile.y = (tile_height-tile_width/(2*Math.sqrt(3))) * j + tile_height/2;#}
-{#        tile.anchor.x = 0.5;#}
-{#        tile.anchor.y = 0.5;#}
-{#        tile.height = tile_height;#}
-{#        tile.width = tile_width;#}
-{#        container.addChild(tile);#}
-{#        coordinates.push({'x':tile.x, 'y':tile.y});#}
-{#        i += 1;#}
-{#    };#}
-{#    count += layout[j];#}
-{#{;#}
-var board = new GameBoard(renderer.width/2, renderer.height/2, renderer.width*0.85);
-    stage.addChild(board);
-console.log(coordinates);
-
-{#for (var y = 0; y < coordinates.length; y++){#}
-{#	create_number(container, 5, coordinates[y]['x'], coordinates[y]['y'], (tile_width * .14));#}
-{#	console.log(coordinates[y]['x']);#}
-{#  #}
-
-/*
- * All the bunnies are added to the container with the addChild method
- * when you do this, all the bunnies become children of the container, and when a container moves,
- * so do all its children.
- * This gives you a lot of flexibility and makes it easier to position elements on the screen
- */
-
-{##}
-{#container.x = renderer.width/2;#}
-{#container.y = renderer.height/2;#}
-    container.pivot.x = container.width/2;
-    container.pivot.y = container.height/2;
-    container.position.x = renderer.width/2;
-    container.position.y = renderer.height/2;
-{#    container.position = [0, 0];#}
-{#container.position = [-0.5,-0.5];#}
-{#    container.x = 0;#}
-{#    container.y = 0;#}
+        // create the root of the scene graph
+        var stage = new PIXI.Container();
+        stage.interactive = false;
+        var board = new GameBoard(renderer.width/2, renderer.height/2, renderer.width*0.50);
+        stage.addChild(board);
+        console.log(board.coordinates);
 
 
-// start animating
-animate();
+        // start animating
+        animate();
 
-function animate() {
+        function animate() {
 
-    requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
 
-    // render the root container
-    renderer.render(stage);
-}
-</script>
+            // render the root container
+            renderer.render(stage);
+        }
+    </script>
 </body>
 </html>
