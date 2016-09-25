@@ -25,3 +25,105 @@
   width: 0;
   border-top: 86.60px solid #64C7CC;
 }
+
+.catan-header {
+    background-color: #c12e2a;
+    color: #bce8f1;
+}
+
+body {
+    background-color: #1099bb;
+	overflow: hidden;
+}
+
+#player-3 {
+  display: none;
+}
+
+#player-4 {
+  display: none;
+}
+
+#game-setup {
+    background: #bce8f1;
+}
+
+.error {
+    color: #c12e2a;
+}
+
+.input-group-btn {
+	overflow: visible;
+}
+
+.input-group-btn .btn-group.bootstrap-select {
+        z-index: inherit;
+}
+
+#mBody {
+	background-color: #bce8f1;
+	overflow: hidden;
+}
+
+.pBody {
+	background-color: #bce8f1;
+}
+
+.modal-header {
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+}
+
+.modal-footer {
+	border-bottom-left-radius: 25px;
+	border-bottom-right-radius: 25px;
+}
+
+/*.modal {*/
+	/*border-radius: 25px;*/
+/*}*/
+
+.modal-content {
+	overflow: hidden;
+	border-radius: 25px;
+}
+
+.modal-content.ui-resizable {
+	/*resize: both;*/
+	overflow: hidden;
+}
+
+#redraw-dialog {
+	position: absolute;
+	top: 0;
+	left: 5%;
+	/*resize: both;*/
+	overflow: hidden;
+	/*width: 20%*/
+
+}
+
+.panel-default > .panel-heading {
+	background-color: #c12e2a;
+    color: #bce8f1;
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+}
+
+.panel-footer {
+	background-color: #c12e2a;
+    color: #bce8f1;
+	border-bottom-left-radius: 25px;
+	border-bottom-right-radius: 25px;
+}
+
+.panel-default {
+	border-radius: 25px;
+	position: absolute;
+	z-index: 1;
+}
+
+.panel-resizable {
+	resize: both;
+	overflow: auto;
+}

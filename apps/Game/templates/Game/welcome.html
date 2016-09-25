@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <link href="{% static 'Game/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'Game/css/bootstrap-select.min.css' %}" rel="stylesheet">
+    <link href="{% static 'Game/css/style.css' %}" rel="stylesheet">
+    <title>Welcome</title>
+    {% load widget_tweaks %}
+</head>
+<body>
+    <script src="{% static 'Game/js/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/bootstrap/js/dropdown.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/bootstrap-select/js/bootstrap-select.js' %}"></script>
+    <div class="container">
+        <div class="jumbotron catan-header" id="header">
+            <img src="{% static 'Game/images/catanlogo.png' %}" alt="">
+            <h1>Welcome to Settlers of Catan</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron" id="game-setup">
+            <h2>Game Setup</h2>
+            <form action="{% url 'welcome' %}" method="post" class="form-horizontal" novalidate>
+                {% csrf_token %}
+                {% for error in form.non_field_errors %}
+                    <p class="error">*{{ error }}</p>
+                {% endfor %}
+                <div class="form-group">
+                <label for="" class="col-xs-8"><p>Number of Players:</p></label>
+                <div class="col-xs-2">
+                    {{ form.number_of_players|add_class:"selectpicker"|set_data:"width:fit"}}
+                </div>
+            </div>
+                <div class="form-group" id="player-1">
+                    {% for error in form.p1_name.errors %}
+                        <p class="error">*{{ error }}</p>
+                    {% endfor %}
+                    <label for="" class="control-label col-xs-3">
+                        <p>Player 1:</p>
+                    </label>
+                    <div class="input-group">
+                        {{ form.p1_name|add_class:"form-control col-xs-9" }}
+                        <div class="input-group-btn">
+                            {{ form.p1_color|add_class:"selectpicker"|set_data:"width:85px" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="player-2">
+                    {% for error in form.p2_name.errors %}
+                        <p class="error">*{{ error }}</p>
+                    {% endfor %}
+                    <label for="" class="control-label col-xs-3">
+                        <p>Player 2:</p>
+                    </label>
+                    <div class="input-group">
+                        {{ form.p2_name|add_class:"form-control col-xs-9" }}
+                        <div class="input-group-btn">
+                            {{ form.p2_color|add_class:"selectpicker"|set_data:"width:85px" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="player-3">
+                    {% for error in form.p3_name.errors %}
+                        <p class="error">*{{ error }}</p>
+                    {% endfor %}
+                    <label for="" class="control-label col-xs-3">
+                        <p>Player 3:</p>
+                    </label>
+                    <div class="input-group">
+                        {{ form.p3_name|add_class:"form-control col-xs-9" }}
+                        <div class="input-group-btn">
+                            {{ form.p3_color|add_class:"selectpicker"|set_data:"width:85px" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="player-4">
+                    {% for error in form.p4_name.errors %}
+                        <p class="error">*{{ error }}</p>
+                    {% endfor %}
+                    <label for="" class="control-label col-xs-3">
+                        <p>Player 4:</p>
+                    </label>
+                    <div class="input-group">
+                        {{ form.p4_name|add_class:"form-control col-xs-9" }}
+                        <div class="input-group-btn">
+                            {{ form.p4_color|add_class:"selectpicker"|set_data:"width:85px" }}
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#id_number_of_players").change(function() {
+                            var number = Number($(this).find("option:selected").text());
+                            if (number >= 3) {
+                                $('#player-3').show();
+                            }
+                            if (number == 4) {
+                                $('#player-4').show();
+                            }
+                            if (number == 2) {
+                                $('#player-4').hide();
+                                $('#player-3').hide();
+                            }
+                        });
+                        var number = Number($("#id_number_of_players").find("option:selected").text());
+                        if (number >= 3) {
+                            $('#player-3').show();
+                        }
+                        if (number == 4) {
+                            $('#player-4').show();
+                        }
+                        if (number == 2) {
+                            $('#player-4').hide();
+                            $('#player-3').hide();
+                        }
+                    })
+                </script>
+
+                <button type="submit" class="btn btn-primary col-xs-offset-1">Start Game</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

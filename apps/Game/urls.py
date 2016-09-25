@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from . import views
-# from django.contrib import admin
+from django.contrib import admin
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index),
-    url(r'zak', views.zak)
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', views.index, name="gameboard"),
+    url(r'zak', views.zak),
+    url(r'^welcome$', views.welcome, name="welcome"),
+    url(r'^panel$', views.panel, name='panel'),
+    url(r'^catan$', views.catan, name="catan")
 ]

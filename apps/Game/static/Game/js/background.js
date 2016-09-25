@@ -2,6 +2,26 @@
  * Created by Zachary on 8/29/2016.
  */
 
+
+function darken(color, percentage) {
+    var i = 4;
+    var rgb = [];
+    while (i >= 0) {
+        var c = Math.floor(color/Math.pow(16, i));
+        color -= c*Math.pow(16, i);
+        rgb.unshift(Math.round(c*percentage));
+        i -= 2;
+    }
+    color = 0;
+    for (var j=0; j < rgb.length; j++ ) {
+        c = rgb[j];
+        color += c*Math.pow(16, 2*j);
+        console.log(color);
+    }
+    console.log(color.toString(16));
+    return color
+}
+
 function NumberButton(number, x, y, radius) {
 
     PIXI.Container.call(this);
@@ -115,12 +135,13 @@ function Hex(url, x, y, width, number) {
     this.pivot.x = this.width/2;
     this.pivot.y = this.height/2;
     this.position.set(x, y);
+    this.number = number;
     this.addChild(this.sprite);
 
-    if (number == 0) {
+    if (this.number == 0) {
         this.button = null;
     } else {
-        this.button = new NumberButton(number, 0, 0, this.sprite.width * 0.14);
+        this.button = new NumberButton(this.number, 0, 0, this.sprite.width * 0.14);
         this.addChild(this.button);
     };
 
@@ -137,53 +158,48 @@ function Hex(url, x, y, width, number) {
                                 [-this.r/2, -3/4*this.R],
                                 [-this.r, 0]];
     var rotations = [Math.PI/6, -Math.PI/6, Math.PI/2, Math.PI/6, -Math.PI/6, Math.PI/2];
-    this.cities = [];
+    this.settlements = [];
     this.roads = [];
 
     for (var k = 0; k < this.corners_coordinates.length; k++){
         var v_coord = this.corners_coordinates[k];
         var e_coord = this.edge_coordinates[k];
-        var rad = 15;
-        var width = 20;
-        var city = new City(v_coord[0], v_coord[1], rad, 0x0, 0);
-        var road = new Road(e_coord[0], e_coord[1], this.R-2*rad, width, rotations[k], 0x0, 0);
+        var rad = this.width*0.15;
+        var width = this.width*0.05;
+        var settlement = new Settlement(v_coord[0], v_coord[1], rad, 0x0, 0);
+        var road = new Road(e_coord[0], e_coord[1], this.R-2*rad*0.6, width, rotations[k], 0x0, 0);
         this.addChild(road);
-        this.addChild(city);
-        this.cities.push(city);
+        this.addChild(settlement);
+        this.settlements.push(settlement);
         this.roads.push(road);
-        // var vertex = new PIXI.Circle(rad, rad, rad);
-        // var edge = new PIXI.Rectangle(0, 0, this.R-2*rad, width);
-        // var v_container = new PIXI.Container();
-        // var e_container = new PIXI.Container();
-        // v_container.interactive = true;
-        // v_container.pivot.set(rad, rad);
-        // v_container.position.set(v_coord[0], v_coord[1]);
-        // e_container.interactive = true;
-        // e_container.pivot.set(this.R/2-rad, width/2);
-        // e_container.position.set(e_coord[0], e_coord[1]);
-        // var rec = new PIXI.Graphics();
-        // var cir = new PIXI.Graphics();
-        // cir.beginFill(0x000000, 0.4);
-        // cir.drawShape(vertex);
-        // rec.beginFill(0x000000, 0.4);
-        // rec.drawShape(edge);
-        // v_container.addChild(cir);
-        // v_container.hitArea = vertex;
-        // v_container.click = function(eventData) {
-        //     console.log(eventData);
-        // };
-        //
-        // e_container.addChild(rec);
-        // e_container.rotation = rotations[k];
-        // e_container.hitArea = edge;
-        // e_container.click = function(eventData) {
-        //     console.log(eventData);
-        // };
-        //
-        // this.addChild(v_container);
-        // this.addChild(e_container);
-        // this.corners.push(v_container);
-        // this.edges.push(e_container);
+    }
+
+    this.rotate2 = function (angle) {
+        this.rotation = angle;
+        // console.log('ran roatate2');
+        // console.log(this.settlements);
+        for (var i=0; i < this.children.length; i++) {
+            var settlement = this.children[i];
+
+            if (settlement instanceof Settlement) {
+                // settlement.position.set(-10,0);
+                settlement.settlement.rotation = -angle;
+            }
+            if (settlement instanceof City) {
+                settlement.city.rotation = -angle;
+            }
+        }
+    };
+
+    this.redrawButton = function(scale){
+        if (this.number == 0) {
+            this.button = null;
+        } else {
+            this.removeChild(this.button);
+            this.button = new NumberButton(this.number, 0, 0, this.sprite.width * 0.14);
+            this.addChild(this.button);
+        };
+
     }
 
 }
@@ -200,6 +216,7 @@ function Road(x, y, length, width, rotation, color, alpha) {
     this.position.set(x,y);
     this.road = new PIXI.Graphics();
     this.road.beginFill(color, alpha);
+    this.road.lineStyle(1, darken(color, 0.95), alpha);
     this.hitArea = new PIXI.Rectangle(0, 0, length, width);
     this.road.drawShape(this.hitArea);
     this.rotation = rotation;
@@ -214,21 +231,70 @@ function Road(x, y, length, width, rotation, color, alpha) {
 Road.prototype = Object.create(PIXI.Container.prototype);
 Road.prototype.constructor = Road;
 
-function City(x, y, radius, color, alpha) {
+function Settlement(x, y, radius, color, alpha) {
     PIXI.Container.call(this);
+
+    this.radius = radius;
+    this.interactive = true;
+    this.hitArea = new PIXI.Circle(0, 0, radius);
+    this.settlement = new PIXI.Graphics();
+    this.settlement.beginFill(color, alpha);
+    this.settlement.lineStyle(1, darken(color, 0.95), alpha);
+    this.settlement.drawPolygon([0,0,
+                                0, -this.radius,
+                                this.radius/2, -3/2*this.radius,
+                                this.radius, -this.radius,
+                                this.radius, 0,
+                                0, 0
+                                ]);
+    // this.settlement.position.set(-this.radius/2, this.radius*3/4);
+    // this.settlement.drawShape(this.hitArea);
+    this.settlement.position.set(0,0);
+    // this.settlement.pivot.set(this.radius/2, 3/4*this.radius);
+    this.settlement.pivot.set(this.radius/2, -3/4*this.radius);
+    this.addChild(this.settlement);
     this.pivot.set(0, 0);
     this.position.set(x, y);
+
+    this.click = function (eventData) {
+        console.log(this.parent.parent.settlements_hit(eventData.data.global));
+    }
+
+
+
+}
+
+Settlement.prototype = Object.create(PIXI.Container.prototype);
+Settlement.prototype.constructor = Settlement;
+
+function City(x, y, radius, color, alpha) {
+    PIXI.Container.call(this);
+
     this.radius = radius;
     this.interactive = true;
     this.hitArea = new PIXI.Circle(0, 0, radius);
     this.city = new PIXI.Graphics();
     this.city.beginFill(color, alpha);
-    this.city.drawShape(this.hitArea);
+    this.city.drawPolygon([0,0,
+                                0, -this.radius,
+                                this.radius/2, -3/2*this.radius,
+                                this.radius, -this.radius,
+                                2*this.radius, -this.radius,
+                                2*this.radius, 0
+                                ]);
+    // this.city.position.set(-this.radius/2, this.radius*3/4);
+    // this.city.drawShape(this.hitArea);
+    this.city.position.set(0,0);
+    // this.city.pivot.set(this.radius/2, 3/4*this.radius);
+    this.city.pivot.set(this.radius, -3/4*this.radius);
     this.addChild(this.city);
+    this.pivot.set(0, 0);
+    this.position.set(x, y);
 
     this.click = function (eventData) {
-        console.log(this.parent.parent.cities_hit(eventData.data.global));
+        console.log(this.parent.parent.settlements_hit(eventData.data.global));
     }
+
 
 
 }
@@ -247,18 +313,14 @@ function GameBoard(x, y, width) {
     this.hex_rotations = [0, Math.PI/3, Math.PI *2/3, Math.PI, Math.PI * 4/3, Math.PI * 5/3];
     this.buttons = shuffle(this.buttons);
     this.randomized_hex_list = shuffle(this.hex_list);
+    // this.randomized_hex_list = this.hex_list;
     this.coordinates = [];
     this.hexes = [];
-    var count = 0;
-    var desert_reached = 0;
-    this.tile_width = width * 0.2;
-    this.tile_height = this.tile_width * 2 / 3 * Math.sqrt(3);
-    this.r = this.tile_width/2;
-    this.R = this.tile_height/2;
     var road_rotations = [Math.PI/6, -Math.PI/6, Math.PI/2, Math.PI/6, -Math.PI/6, Math.PI/2];
-    this.cities =[];
+    this.settlements =[];
     this.roads = [];
     this.color = 0xff000;
+    this.input_scale = 1;
 
     var corners_coordinates = [[0,this.R],
                                 [this.r,this.R/2],
@@ -273,7 +335,16 @@ function GameBoard(x, y, width) {
                                 [-this.r/2, -3/4*this.R],
                                 [-this.r, 0]];
 
-    for (var j = 0; j < 5; j++) {
+    this.draw = function(x, y, width, rotate) {
+        var count = 0;
+        var desert_reached = 0;
+        this.input_width = width;
+        this.tile_width = this.input_width * 0.2;
+        this.tile_height = this.tile_width * 2 / 3 * Math.sqrt(3);
+        this.r = this.tile_width/2;
+        this.R = this.tile_height/2;
+
+        for (var j = 0; j < 5; j++) {
 
         var i = 0;
         var row = [];
@@ -292,7 +363,50 @@ function GameBoard(x, y, width) {
                 var tile = new Hex(this.images[n], x1, y1, this.tile_width, this.buttons[i + count - desert_reached]);
             }
 
-            tile.rotation = this.hex_rotations[Math.round(Math.random()*5)];
+            if (rotate) {
+                tile.rotate2(this.hex_rotations[Math.round(Math.random() * 5)]);
+            }
+            this.addChild(tile);
+            // row.push(tile);
+            this.hexes.push(tile);
+            this.coordinates.push({'x':tile.x, 'y':tile.y});
+            i += 1;
+        };
+        // this.hexes.push(row);
+        count += this.layout[j];
+    };
+    this.pivot.set(this.width/2, this.height/2);
+    this.position.set(x, y);
+
+    };
+
+    this.empty = function() {
+        for (var i = this.children.length -1; i>=0; i--) {
+            this.removeChild(this.children[i]);
+        }
+    };
+
+    this.draw2 = function(x, y, width, hex_list, button_list) {
+        for (var j = 0; j < 5; j++) {
+
+        var i = 0;
+        var row = [];
+        while (i < this.layout[j]) {
+            var n = this.randomized_hex_list[i+count];
+            var x1 = (this.tile_width) * i + this.starting_position[j]*this.tile_width/2 + this.tile_width/2;
+            var y1 = (this.tile_height-this.tile_width/(2*Math.sqrt(3))) * j + this.tile_height/2;
+            var type = '';
+            var a = this.images[n].split("/");
+            type = a[a.length - 1];
+            type = type.split('.')[0];
+            if (n == 0) {
+                var tile = new Hex(this.images[n], x1, y1, this.tile_width, 0);
+                desert_reached = 1;
+            } else {
+                var tile = new Hex(this.images[n], x1, y1, this.tile_width, this.buttons[i + count - desert_reached]);
+            }
+
+            tile.rotate2(this.hex_rotations[Math.round(Math.random()*5)]);
 
             this.addChild(tile);
             // row.push(tile);
@@ -306,24 +420,24 @@ function GameBoard(x, y, width) {
     this.pivot.set(this.width/2, this.height/2);
     this.position.set(x, y);
 
-    this.cities_hit = function(point) {
-        console.log(point);
-        var cities = [];
+    };
+
+    this.settlements_hit = function(point) {
+        var settlements = [];
         for (var i = 0; i < this.hexes.length; i++) {
             var hex = this.hexes[i];
-            for (var j=0; j < hex.cities.length; j++){
-                var city = hex.cities[j];
-                if (city.city.containsPoint(point)) {
-                    cities.push(city);
-                    this.redraw_city(city);
+            for (var j=0; j < hex.settlements.length; j++){
+                var settlement = hex.settlements[j];
+                if (settlement.settlement.containsPoint(point)) {
+                    settlements.push(settlement);
+                    this.redraw_settlement(settlement);
                 }
             }
         }
-        return cities;
-    }
+        return settlements;
+    };
 
     this.roads_hit = function(point) {
-        console.log(point);
         var roads = [];
         for (var i = 0; i < this.hexes.length; i++) {
             var hex = this.hexes[i];
@@ -336,15 +450,16 @@ function GameBoard(x, y, width) {
             }
         }
         return roads;
-    }
+    };
 
-    this.redraw_city = function (city) {
-        var oldCity = city;
-        var hex = oldCity.parent;
-        var newCity = new City(oldCity.x, oldCity.y, oldCity.radius, this.color, 1);
-        hex.removeChild(oldCity);
-        hex.addChild(newCity);
-    }
+    this.redraw_settlement = function (settlement) {
+        var oldSettlement = settlement;
+        var hex = oldSettlement.parent;
+        var newSettlement = new Settlement(oldSettlement.x, oldSettlement.y, oldSettlement.radius, this.color, 1);
+        newSettlement.settlement.rotation = -hex.rotation;
+        hex.removeChild(oldSettlement);
+        hex.addChild(newSettlement);
+    };
 
     this.redraw_road = function (road) {
         var oldRoad = road;
@@ -352,7 +467,28 @@ function GameBoard(x, y, width) {
         var newRoad = new Road(oldRoad.x, oldRoad.y, oldRoad.length, oldRoad.w, oldRoad.rotation, this.color, 1);
         hex.removeChild(oldRoad);
         hex.addChild(newRoad);
-    }
+    };
+
+    this.redraw = function(x, y, width) {
+        this.empty();
+        this.draw(x, y, width, false);
+    };
+
+    this.redrawButtons = function() {
+        for (var i = 0; i < this.hexes.length; i++) {
+            var hex = this.hexes[i];
+            hex.redrawButton();
+        }
+    };
+
+    this.update_scale = function(factor){
+        this.input_scale = this.input_scale *(1+ factor);
+        return this.input_scale
+    };
+
+    this.draw(x, y, width, true);
+
+
 
 }
 

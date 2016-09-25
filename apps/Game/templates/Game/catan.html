@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'Game/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'Game/css/style.css' %}" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static 'Game/js/bower_components/jquery-ui/themes/base/jquery-ui.min.css' %}">
+	<title>Settlers of Catan</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="{% static 'Game/js/bower_components/pixi.js/bin/pixi.js' %}"></script>
+	<script src="{% static 'Game/js/background.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'Game/js/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+{#    <script src="{% static 'Game/js/bower_components/bootstrap/js/modal.js' %}"></script>#}
+</head>
+<body data-root="{$ static $}">
+
+    <div class="modal fade" role="dialog" id="start-message" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header catan-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+{#                    <h4 class="modal-title">Welcome</h4>#}
+                    <img src="{% static 'Game/images/catanlogo.png' %}" alt="">
+                </div>
+                <div class="modal-body" id="mBody">
+                    <h4>Hi
+                        {% for player in players %}
+                            {% if forloop.counter != players|length %}
+                                 {{ player }},
+                            {% else %}
+                                & {{ player }}.
+                            {% endif %}
+                        {% endfor %}
+                         Let's begin.
+                    </h4>
+                </div>
+                <div class="modal-footer catan-header">
+                    <button class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#redraw">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" role="dialog" id="redraw" data-backdrop="static" modalOverflow="true">
+        <div class="modal-dialog modal-sm" id="redraw-dialog">
+            <div class="modal-content" id="redraw-content">
+                <div class="modal-header catan-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <img src="{% static 'Game/images/catanlogo.png' %}" alt="">
+                </div>
+                <div class="modal-body" id="mBody">
+                    <h4>
+                        If you like this board, click play, else redraw board.
+                    </h4>
+                    <p>
+                        For the best experience, make sure that no hexes with red buttons are adjacent.
+                    </p>
+                </div>
+                <div class="modal-footer catan-header">
+                    <div class="btn-group">
+                        <button class="btn btn-default" id="redraw-btn">Redraw Board</button>
+                        <button class="btn btn-default" id ="play-btn" data-dismiss="modal">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'Game/panel.html' %}
+
+
+    <script>
+        console.log(window.innerWidth, window.innerHeight);
+        var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {backgroundColor : 0x1099bb});
+        document.body.appendChild(renderer.view);
+
+        // create the root of the scene graph
+        var stage = new PIXI.Container();
+        stage.interactive = false;
+        var board = new GameBoard(renderer.width/2, renderer.height/2, renderer.width*0.50);
+        stage.addChild(board);
+        console.log(board.coordinates);
+
+
+        // start animating
+        animate();
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            // render the root container
+            renderer.render(stage);
+        }
+
+        var startMessage = $('#start-message');
+        startMessage.modal('show');
+        var redraw = $('#redraw-dialog');
+        redraw.draggable({handle: ".modal-header"});
+        $('#redraw-dialog').resizable({
+            alsoResize: ".modal-body"
+        });
+        var redrawBtn = $("#redraw-btn");
+        var playBtn = $('#play-btn');
+        redrawBtn.on('click', function(eventData) {
+            stage.removeChild(board);
+            board = new GameBoard(renderer.width/2, renderer.height/2, renderer.width*0.50);
+            stage.addChild(board);
+
+        });
+        var turnTracker = $('#turn-tracker');
+        turnTracker.hide();
+
+        playBtn.on('click', function(eventData) {
+{#            turnTracker.show();#}
+        });
+
+        var mouseDown = false;
+        var mouseDownStart = [];
+        var boardStart = [];
+
+        function zoom (eventData) {
+            var multiplier = 0.1;
+            var scale = board.update_scale(-multiplier*Math.sign(eventData.deltaY));
+            var a = board.width;
+            var x = board.x - ((multiplier)*Math.sign(eventData.deltaY)*(board.x-eventData.x));
+            var y = board.y - ((multiplier)*Math.sign(eventData.deltaY)*(board.y-eventData.y));
+
+            board.setTransform(x, y, scale, scale, 0, 0, 0, board.pivot.x, board.pivot.y);
+{#            board.redrawButtons(multiplier);#}
+        }
+
+        function mouseD(eventData) {
+            mouseDownStart = [eventData.x, eventData.y];
+            boardStart = [board.x, board.y];
+            mouseDown = true;
+        }
+
+        function pan(eventData){
+            if (mouseDown){
+                board.position.set(boardStart[0]+(eventData.x-mouseDownStart[0]), boardStart[1]+(eventData.y-mouseDownStart[1]));
+            }
+        }
+
+        function mouseU(eventData){
+            mouseDown = false;
+        }
+
+        var canvas = $("canvas")[0];
+        canvas.addEventListener('mousewheel', zoom);
+        canvas.addEventListener('mousedown', mouseD);
+        canvas.addEventListener('mousemove', pan);
+        canvas.addEventListener('mouseup', mouseU);
+
+
+        var state = 'setup';
+        var players = {{ players|safe }};
+        var turn = players[0];
+
+
+    </script>
+
+
+</body>
+</html>
